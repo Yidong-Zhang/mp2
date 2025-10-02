@@ -7,15 +7,15 @@ const GALLERY_CACHE_KEY = 'gallery_state_v2';
 
 type Group = 'AF' | 'GL' | 'MR' | 'SZ';
 const LETTERS: Record<Group, string[]> = {
-  AF: ['a','b','c','d','e','f'],
-  GL: ['g','h','i','j','k','l'],
-  MR: ['m','n','o','p','q','r'],
-  SZ: ['s','t','u','v','w','x','y','z'],
+    AF: ['a','b','c','d','e','f'],
+    GL: ['g','h','i','j','k','l'],
+    MR: ['m','n','o','p','q','r'],
+    SZ: ['s','t','u','v','w','x','y','z'],
 };
 
 function imgUrl(t?: { path: string; extension: string }, variant = 'portrait_xlarge') {
-  if (!t?.path || !t?.extension) return '';
-  return `${t.path}/${variant}.${t.extension}`;
+    if (!t?.path || !t?.extension) return '';
+    return `${t.path}/${variant}.${t.extension}`;
 }
 
 export default function Gallery() {
@@ -24,6 +24,11 @@ export default function Gallery() {
     const [needDesc, setNeedDesc] = useState(false);
     const [offsets, setOffsets] = useState<Record<string, number>>({});
     const [loading, setLoading] = useState(false);
+
+    const activeLetters = useMemo<string[]>(
+        () => (groups.length === 0 ? [] : groups.flatMap(g => LETTERS[g])),
+        [groups]
+    );
 
     useEffect(() => {
         const saved = sessionStorage.getItem(GALLERY_CACHE_KEY);
@@ -66,18 +71,10 @@ export default function Gallery() {
         })();
     }, [items.length]);
 
-    const activeLetters: string[] =
-        groups.length === 0 ? [] : groups.flatMap(g => LETTERS[g]);
-
     useEffect(() => {
-        if (groups.length === 0) return;
+        if (activeLetters.length === 0) return;
         (async () => {
         setLoading(true);
-        setOffsets(prev => {
-            const next = { ...prev };
-            activeLetters.forEach(l => { next[l] = 0; });
-            return next;
-        });
         const settled = await Promise.allSettled(
             activeLetters.map(l => searchCharacters(l, 0, 40))
         );
@@ -93,7 +90,7 @@ export default function Gallery() {
         });
         setLoading(false);
         })();
-    }, [groups.join(',')]);
+    }, [activeLetters]);
 
     const loadMore = async () => {
         if (loading || activeLetters.length === 0) return;
@@ -107,11 +104,11 @@ export default function Gallery() {
         items.forEach(c => { byId[c.id] = c; });
         const newOffsets: Record<string, number> = { ...offsets };
         settled.forEach(s => {
-        if (s.status === 'fulfilled') {
-            const { letter, res } = s.value;
-            res.results.forEach(c => { byId[c.id] = c; });
-            if (res.results.length > 0) newOffsets[letter] = (newOffsets[letter] ?? 0) + 40;
-        }
+            if (s.status === 'fulfilled') {
+                const { letter, res } = s.value;
+                res.results.forEach(c => { byId[c.id] = c; });
+                if (res.results.length > 0) newOffsets[letter] = (newOffsets[letter] ?? 0) + 40;
+            }
         });
         setItems(Object.values(byId));
         setOffsets(newOffsets);
@@ -123,22 +120,23 @@ export default function Gallery() {
         const url = imgUrl(c.thumbnail);
         if (!url) return false;
         if (c.thumbnail?.path?.includes('image_not_available')) return false;
-        if (groups.length > 0) {
+        if (activeLetters.length > 0) {
             const ch = (c.name[0] || 'z').toLowerCase();
             if (!activeLetters.includes(ch)) return false;
         }
         if (needDesc && !(c.description || '').trim()) return false;
         return true;
         });
-    }, [items, groups, activeLetters, needDesc]);
+    }, [items, activeLetters, needDesc]);
 
     const ids = displayed.map(x => x.id);
     const toggleGroup = (g: Group) =>
         setGroups(prev => (prev.includes(g) ? prev.filter(x => x !== g) : [...prev, g]));
 
-  return (
-    <div>
+    return (
+        <div>
         <h2>Gallery</h2>
+
         <fieldset className={styles.filters}>
             <legend>Filter</legend>
             <label><input type="checkbox" checked={groups.includes('AF')} onChange={() => toggleGroup('AF')} /> A-F</label>{' '}
@@ -162,13 +160,13 @@ export default function Gallery() {
             })}
         </ul>
 
-      {groups.length > 0 && (
-        <p>
-        <button onClick={loadMore} disabled={loading}>
-            {loading ? 'Loading…' : 'Load more'}
-        </button>
-        </p>
+        {activeLetters.length > 0 && (
+            <p>
+                <button onClick={loadMore} disabled={loading}>
+                    {loading ? 'Loading…' : 'Load more'}
+                </button>
+            </p>
         )}
-    </div>
+        </div>
     );
 }

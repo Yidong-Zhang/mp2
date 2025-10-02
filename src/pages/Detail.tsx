@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
+import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import { getCharacterById, type Character } from '../API/marvel';
 
 type NavState = { ids?: number[]; index?: number };
