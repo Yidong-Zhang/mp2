@@ -1,26 +1,29 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Link, Routes, Route, Navigate } from 'react-router-dom';
+import List from './pages/List';
+import Gallery from './pages/Gallery';
+import Detail from './pages/Detail';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <nav>
+          <Link to="/">List</Link> |{" "}
+          <Link to="/gallery">Gallery</Link>
+        </nav>
       </header>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<List />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
     </div>
   );
 }
-
-export default App;

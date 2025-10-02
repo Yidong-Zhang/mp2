@@ -1,0 +1,44 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.card {
+    width: 100%;
+    max-width: 880px;
+    text-align: center;
+}
+
+.title {     
+    font-size: 32px;
+    margin: 0 0 16px;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.controls input,
+.controls select,
+.controls button {
+    font-size: 18px;
+    padding: 8px 12px;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.link {
+    text-decoration: none;
+}
