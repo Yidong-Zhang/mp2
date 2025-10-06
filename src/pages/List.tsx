@@ -64,8 +64,12 @@ export default function List() {
         <ul className={styles.list}>
             {sorted.map((c, idx) => (
             <li key={c.id}>
-                <Link to={`/detail/${c.id}`} state={{ ids, index: idx }}>
-                {c.name} (id: {c.id})
+                <Link
+                    to={`/detail/${c.id}`}
+                    className={styles.link}
+                    state={{ ids: sorted.map(x => x.id), index: idx }}
+                    >
+                    {c.name} (id: {c.id})
                 </Link>
             </li>
             ))}

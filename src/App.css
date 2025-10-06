@@ -1,6 +1,16 @@
 .App {
   text-align: center;
 }
+body {
+  margin: 0;
+  background-image: url('./assets/marvel-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: 'Helvetica', sans-serif;
+  color: black;
+}
+
 
 .App-logo {
   height: 40vmin;
