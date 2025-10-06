@@ -7,15 +7,15 @@
 }
 
 .detailWrap h2 {
-  font-size: 32px;
-  margin-bottom: 12px;
-  color: #ffd700;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: #ffd700;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
 }
 
 .detailWrap p {
-  font-size: 20px;
-  line-height: 1.8;
-  max-width: 800px;
-  margin: 0 auto 24px auto;
-}
+    font-size: 20px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 24px auto;
+    }

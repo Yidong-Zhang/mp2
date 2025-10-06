@@ -31,8 +31,6 @@ export default function List() {
         return arr;
     }, [items, sortBy, order]);
 
-    const ids = useMemo(() => sorted.map(x => x.id), [sorted]);
-
     return (
         <div className={styles.wrap}>
         <h2>Characters</h2>
